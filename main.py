@@ -22,8 +22,6 @@ def cadastrar_livro():
         título = input("Digite o título do livro: ").lower()
         autor = input("Digite o autor do livro: ").lower()
         ano = input("Digite o ano do livro: ")
-
-        cadastrar_livro(título, ano, autor)
         cursor.execute("""
         INSERT INTO livros (título, autor, ano, disponível)
         VALUES (?, ?, ?, ?)                                         
@@ -89,7 +87,7 @@ def remover_livro():
         conexao = sqlite3.connect("biblioteca.db")
         cursor = conexao.cursor()
         remover = int(input("Digite o id do livro que deseja deletar: "))
-        cursor.execute("DELETE FROM livros WHERE id = ?", )
+        cursor.execute("DELETE FROM livros WHERE id = ?", (remover,))
         conexao.commit()
 
         if cursor.rowcount > 0:
@@ -104,26 +102,25 @@ def remover_livro():
 
 
 def menu():
-    try:
-        while True:
-            print("\nMenu:")
-            print("1.Cadastra livro")
-            print("2.Listar livrro")
-            print("3.Atualizar disponibiilidade")
-            print("4.Deletar livro")
-            print("5.Sair")
-            opcao = input("Escolha uma opção: ")
-            match opcao :
-                case "1": cadastrar_livro()
-                case "2": listar_livros()
-                case "3": atualizar_disponibilidade()
-                case "4": remover_livro()
-    except sqlite3.Error as error:
-        print("Error na operação do menu: ", error)
-    finally:
-        if conexao:
-            conexao.close()
-menu()
+    while True:
+        print("\nMenu:")
+        print("1.Cadastra livro")
+        print("2.Listar livro")
+        print("3.Atualizar disponibiilidade")
+        print("4.Deletar livro")
+        print("5.Sair")
+        opcao = input("Escolha uma opção: ")
+        if opcao == "1":
+            cadastrar_livro()
+        if opcao == "2":
+            listar_livros()
+        if opcao == "3":
+            atualizar_disponibilidade()
+        if opcao == "4":
+            remover_livro()
+        
+    
+menu() 
 
 
 
