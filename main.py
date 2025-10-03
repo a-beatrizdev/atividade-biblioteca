@@ -15,6 +15,38 @@ CREATE TABLE IF NOT EXISTS livros (
 """)
 
 
+def cadastrar_livro(título, autor, ano):
+    try:
+        conexao = sqlite3.connect("biblioteca.db")
+        cursor = conexao.cursor()
+    
+        cursor.execute("""
+        INSERT INTO livros (título, autor, ano, disponível)
+        VALUES (?, ?, ?, ?)                                         
+        """,
+        (título, autor, ano, "sim")
+        )
+        conexao.commit()
+
+    except Exception as erro:
+        print(f"Erro ao tentar cadastrar o livro {erro} ")
+    finally:
+        if conexao:
+            conexao.close()
+
+título = input("Digite o título do livro: ").lower()
+autor = input("Digite o autor do livro: ").lower()
+ano = input("Digite o ano do livro: ")
+
+cadastrar_livro(título, ano, autor)
+
+
+
+
+    
+
+        
+
 
 
 
