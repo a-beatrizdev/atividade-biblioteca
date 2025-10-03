@@ -15,101 +15,115 @@ CREATE TABLE IF NOT EXISTS livros (
 """)
 
 
-# def cadastrar_livro(título, autor, ano):
-#     try:
-#         conexao = sqlite3.connect("biblioteca.db")
-#         cursor = conexao.cursor()
-    
-#         cursor.execute("""
-#         INSERT INTO livros (título, autor, ano, disponível)
-#         VALUES (?, ?, ?, ?)                                         
-#         """,
-#         (título, autor, ano, "sim")
-#         )
+def cadastrar_livro():
+    try:
+        conexao = sqlite3.connect("biblioteca.db")
+        cursor = conexao.cursor()
+        título = input("Digite o título do livro: ").lower()
+        autor = input("Digite o autor do livro: ").lower()
+        ano = input("Digite o ano do livro: ")
 
-#         conexao.commit()
-#     except Exception as erro:
+        cadastrar_livro(título, ano, autor)
+        cursor.execute("""
+        INSERT INTO livros (título, autor, ano, disponível)
+        VALUES (?, ?, ?, ?)                                         
+        """,
+        (título, autor, ano, "sim")
+        )
 
-#         print(f"Erro ao tentar cadastrar o livro {erro} ")
-#     finally:
-#         if conexao:
-#             conexao.close()
+        conexao.commit()
+    except Exception as erro:
 
-# título = input("Digite o título do livro: ").lower()
-# autor = input("Digite o autor do livro: ").lower()
-# ano = input("Digite o ano do livro: ")
-
-# cadastrar_livro(título, ano, autor)
-
-# def listar_livros():
-#     try:
-#         conexao = sqlite3.connect("biblioteca.db")
-#         cursor = conexao.cursor()
-
-#         cursor.execute("SELECT * FROM livros")
-#         for linha in cursor.fetchall():
-#             print(f"id: {linha[0]} | título: {linha[1]} | Autor: {linha[2]} | ano: {linha[3]} | disponível: {linha[4]} ")
-
-#     except Exception as erro:
-#         print(f"Erro ao listar o livro {erro} ")
-#     finally:
-#         if conexao:
-#             conexao.close()
-# listar_livros()
+        print(f"Erro ao tentar cadastrar o livro {erro} ")
+    finally:
+        if conexao:
+            conexao.close()
 
 
-# def atualizar_disponibilidade():
-#     try:
-#         conexao = sqlite3.connect("biblioteca.db")
-#         cursor = conexao.cursor()
-        
-#         id_livro = int(input("Digite o id do livro que deseja atualizar a disponibilidade: ").strip())
-#         nova_disponibilidade = input("Digite a nova disponibilidade (sim/não): ").lower().strip()
+def listar_livros():
+    try:
+        conexao = sqlite3.connect("biblioteca.db")
+        cursor = conexao.cursor()
 
-#         cursor.execute("""
-#         UPDATE livros SET disponível = ? WHERE id = ?
-#         """, (nova_disponibilidade, id_livro))
+        cursor.execute("SELECT * FROM livros")
+        for linha in cursor.fetchall():
+            print(f"id: {linha[0]} | título: {linha[1]} | Autor: {linha[2]} | ano: {linha[3]} | disponível: {linha[4]} ")
 
-#         conexao.commit()
-#         if cursor.rowcount > 0:
-#             print("Disponibilidade atualizada com sucesso!")
-#         else:
-#             print("Nenhum livro encontrado com o id fornecido.")
-#     except Exception as erro:
-#         print("Erro ao atualizar disponibilidade:", {erro})
-#     finally:
-#         if conexao:
-#             conexao.close()
-# atualizar_disponibilidade()
-
-
-# def remover_livro(id_livros):
-#     try:
-#         conexao = sqlite3.connect("biblioteca.db")
-#         cursor = conexao.cursor()
-
-#         cursor.execute("DELETE FROM livros WHERE id = ?", (id_livros,))
-#         conexao.commit()
-
-#         if cursor.rowcount > 0:
-#             print("O livro foi removido com sucesso!")
-#         else:
-#             print("Nenhum livro encontrado.")
-#     except Exception as erro:
-#         print(f"Erro ao tentar excluir o livro {erro} ")
-#     finally:
-#         if conexao:
-#             conexao.close()
-# remover = int(input("Digite o id do livro que deseja deletar: "))
-# remover_livro(remover)
+    except Exception as erro:
+        print(f"Erro ao listar o livro {erro} ")
+    finally:
+        if conexao:
+            conexao.close()
 
 
 
+def atualizar_disponibilidade():
+    try:
+        conexao = sqlite3.connect("biblioteca.db")
+        cursor = conexao.cursor()
 
+        id_livro = int(input("Digite o id do livro que deseja atualizar a disponibilidade: ").strip())
+        nova_disponibilidade = input("Digite a nova disponibilidade (sim/não): ").lower().strip()
+
+        cursor.execute("""
+        UPDATE livros SET disponível = ? WHERE id = ?
+        """, (nova_disponibilidade, id_livro))
+
+        conexao.commit()
+        if cursor.rowcount > 0:
+            print("Disponibilidade atualizada com sucesso!")
+        else:
+            print("Nenhum livro encontrado com o id fornecido.")
+    except Exception as erro:
+        print("Erro ao atualizar disponibilidade:", {erro})
+    finally:
+        if conexao:
+            conexao.close()
 
 
 
                        
+                       
+def remover_livro():
+    try:
+        conexao = sqlite3.connect("biblioteca.db")
+        cursor = conexao.cursor()
+        remover = int(input("Digite o id do livro que deseja deletar: "))
+        cursor.execute("DELETE FROM livros WHERE id = ?", )
+        conexao.commit()
+
+        if cursor.rowcount > 0:
+            print("O livro foi removido com sucesso!")
+        else:
+            print("Nenhum livro encontrado.")
+    except Exception as erro:
+        print(f"Erro ao tentar excluir o livro {erro} ")
+    finally:
+        if conexao:
+            conexao.close()
+
+
+def menu():
+    try:
+        while True:
+            print("\nMenu:")
+            print("1.Cadastra livro")
+            print("2.Listar livrro")
+            print("3.Atualizar disponibiilidade")
+            print("4.Deletar livro")
+            print("5.Sair")
+            opcao = input("Escolha uma opção: ")
+            match opcao :
+                case "1": cadastrar_livro()
+                case "2": listar_livros()
+                case "3": atualizar_disponibilidade()
+                case "4": remover_livro()
+    except sqlite3.Error as error:
+        print("Error na operação do menu: ", error)
+    finally:
+        if conexao:
+            conexao.close()
+menu()
 
 
 
@@ -122,13 +136,6 @@ CREATE TABLE IF NOT EXISTS livros (
 
 
 
-
-
-
-
-    
-
-        
 
 
 
