@@ -83,8 +83,32 @@ CREATE TABLE IF NOT EXISTS livros (
 # atualizar_disponibilidade()
 
 
-                       
-                       
+# def remover_livro(id_livros):
+#     try:
+#         conexao = sqlite3.connect("biblioteca.db")
+#         cursor = conexao.cursor()
+
+#         cursor.execute("DELETE FROM livros WHERE id = ?", (id_livros,))
+#         conexao.commit()
+
+#         if cursor.rowcount > 0:
+#             print("O livro foi removido com sucesso!")
+#         else:
+#             print("Nenhum livro encontrado.")
+#     except Exception as erro:
+#         print(f"Erro ao tentar excluir o livro {erro} ")
+#     finally:
+#         if conexao:
+#             conexao.close()
+# remover = int(input("Digite o id do livro que deseja deletar: "))
+# remover_livro(remover)
+
+
+
+
+
+
+
                        
 
 
